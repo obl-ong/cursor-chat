@@ -1,7 +1,8 @@
 import './style.css'
 
 import * as Y from 'yjs'
-import { WebrtcProvider } from 'y-webrtc'
+import {WebsocketProvider} from "@y-rb/actioncable";
+import { createConsumer } from "@rails/actioncable";
 import { PerfectCursor } from 'perfect-cursors'
 import { nanoid } from 'nanoid'
 import randomcolor from 'randomcolor'
@@ -102,8 +103,7 @@ export const initCursorChat = <T>(
     renderCursor,
     color,
     yDoc,
-    shouldChangeUserCursor,
-    signallingServers
+    shouldChangeUserCursor
   } = {
     ...DefaultConfig<T>(),
     ...config,
@@ -126,17 +126,18 @@ export const initCursorChat = <T>(
   }
 
   let doc: Y.Doc
-  let provider: Y.AbstractConnector | undefined
+  let consumer;
+  let provider: WebsocketProvider | undefined
   if (yDoc !== undefined) {
     doc = yDoc
   } else {
     doc = new Y.Doc()
-    provider = new WebrtcProvider(
-      room_id,
+    consumer = createConsumer();
+    provider = new WebsocketProvider(
       doc,
-      {
-        signaling: signallingServers
-      }
+      consumer,
+      "CursorChatChannel",
+      { id: `${room_id}` }
     )
   }
 
