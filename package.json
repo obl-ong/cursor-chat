@@ -32,6 +32,7 @@
     "perfect-cursors": "^1.0.5",
     "randomcolor": "^0.6.2",
     "y-webrtc": "^10.2.5",
+    "y-rb/actioncable": "^0.2.1",
     "yjs": "^13.5.44"
   }
 }
